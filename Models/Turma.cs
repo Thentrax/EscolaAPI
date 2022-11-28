@@ -6,6 +6,6 @@ namespace EscolaAPI.Models
     {
         public int Id { get; set; }
         public DateTime AnoLetivo { get; set; }
-        
+        public virtual ICollection<Aluno> Alunos { get; set; }
     }
 }

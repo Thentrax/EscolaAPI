@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using EscolaAPI.Models;
 
 namespace EscolaAPI.Context
 {
@@ -8,6 +9,12 @@ namespace EscolaAPI.Context
         {
         }
 
-        
-    }
+        public DbSet<Aluno> Aluno { get; set; }
+        public DbSet<Turma> Turma { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+   }
 }

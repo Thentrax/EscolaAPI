@@ -3685,19 +3685,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Thiago\\.nuget\\packages\\": {}
+    "C:\\Users\\01236\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Thiago\\OneDrive\\Documentos\\Estudo\\C#\\EscolaAPI\\EscolaAPI.csproj",
+      "projectUniqueName": "C:\\Users\\01236\\Documents\\Estudo\\C#\\Rep\\EscolaAPI\\EscolaAPI.csproj",
       "projectName": "EscolaAPI",
-      "projectPath": "C:\\Users\\Thiago\\OneDrive\\Documentos\\Estudo\\C#\\EscolaAPI\\EscolaAPI.csproj",
-      "packagesPath": "C:\\Users\\Thiago\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Thiago\\OneDrive\\Documentos\\Estudo\\C#\\EscolaAPI\\obj\\",
+      "projectPath": "C:\\Users\\01236\\Documents\\Estudo\\C#\\Rep\\EscolaAPI\\EscolaAPI.csproj",
+      "packagesPath": "C:\\Users\\01236\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\01236\\Documents\\Estudo\\C#\\Rep\\EscolaAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Thiago\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\01236\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"

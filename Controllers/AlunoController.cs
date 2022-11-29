@@ -28,16 +28,25 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Aluno aluno)
+        public IActionResult Post([FromBody] Aluno aluno, [FromQuery] int turmaId)
         {
             if (aluno == null)
             {
-                return BadRequest("Aluno inválido");
+                return BadRequest("Dados de aluno inválidos");
             }
             else{
-                _context.Aluno.Add(aluno);
-                _context.SaveChanges();
-                return Ok("Aluno cadastrado com sucesso");
+                var turma = _context.Turma.FirstOrDefault(t => t.Id == turmaId);
+                if (turma == null)
+                {
+                    return NotFound("Turma não encontrada");
+                }
+                else{
+                    _context.Aluno.Add(aluno);
+                    // var alunoBanco = _context.Aluno.FirstOrDefault(a => a.CPF == aluno.CPF);
+                    // turma.Alunos.Add(alunoBanco);
+                    _context.SaveChanges();
+                    return Ok("Aluno cadastrado com sucesso");
+                }
             }
         }
 

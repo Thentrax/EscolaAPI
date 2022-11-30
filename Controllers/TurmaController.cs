@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using EscolaAPI.Models;
 using EscolaAPI.Context;
 
@@ -15,10 +16,10 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetTurma()
         {
             var turmas = _context.Turma.ToList();
-            if (turmas == null)
+            if (turmas.Count == 0)
             {
                 return NotFound("Nenhuma turma encontrada");
             }
@@ -28,7 +29,7 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Turma turma)
+        public IActionResult PostTurma(Turma turma)
         {
             if (turma == null)
             {
@@ -42,7 +43,7 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Turma turma)
+        public IActionResult PutTurma(int id, Turma turma)
         {
             var turmaUpdate = _context.Turma.FirstOrDefault(t => t.Id == id);
             if (turmaUpdate == null)
@@ -57,12 +58,16 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteTurma(int id)
         {
-            var turmaDelete = _context.Turma.FirstOrDefault(t => t.Id == id);
+            var turmaDelete = _context.Turma.Include(t => t.Alunos).FirstOrDefault(t => t.Id == id);
             if (turmaDelete == null)
             {
                 return NotFound("Turma não encontrada");
+            }
+            if (turmaDelete.Alunos.Count != 0)
+            {
+                return BadRequest("Turma possui alunos cadastrados");
             }
             else{
                 _context.Turma.Remove(turmaDelete);

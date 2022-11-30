@@ -15,10 +15,10 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAluno()
         {
             var alunos = _context.Aluno.ToList();
-            if (alunos == null)
+            if (alunos.Count == 0)
             {
                 return NotFound("Nenhum aluno encontrado");
             }
@@ -28,30 +28,32 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Aluno aluno, [FromQuery] int turmaId)
+        public IActionResult PostAluno(Aluno aluno, int turmaId)
         {
             if (aluno == null)
             {
                 return BadRequest("Dados de aluno inválidos");
             }
+            // valida se CPF já foi cadastrado
+            var alunoExistente = _context.Aluno.FirstOrDefault(a => a.CPF == aluno.CPF);
+            if (alunoExistente != null)
+            {
+                return BadRequest("CPF já cadastrado");
+            }
+            var turma = _context.Turma.FirstOrDefault(t => t.Id == turmaId);
+            if (turma == null)
+            {
+                return BadRequest("Turma não encontrada");
+            }
             else{
-                var turma = _context.Turma.FirstOrDefault(t => t.Id == turmaId);
-                if (turma == null)
-                {
-                    return NotFound("Turma não encontrada");
-                }
-                else{
-                    _context.Aluno.Add(aluno);
-                    // var alunoBanco = _context.Aluno.FirstOrDefault(a => a.CPF == aluno.CPF);
-                    // turma.Alunos.Add(alunoBanco);
-                    _context.SaveChanges();
-                    return Ok("Aluno cadastrado com sucesso");
-                }
+                _context.Aluno.Add(aluno);
+                _context.SaveChanges();
+                return Ok("Aluno cadastrado com sucesso");
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Aluno aluno)
+        public IActionResult PutAluno(int id, Aluno aluno)
         {
             var alunoUpdate = _context.Aluno.FirstOrDefault(a => a.Id == id);
             if (alunoUpdate == null)
@@ -68,15 +70,15 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteAluno(int id)
         {
-            var alunoDelete = _context.Aluno.FirstOrDefault(a => a.Id == id);
-            if (alunoDelete == null)
+            var aluno = _context.Aluno.FirstOrDefault(a => a.Id == id);
+            if (aluno == null)
             {
                 return NotFound("Aluno não encontrado");
             }
             else{
-                _context.Aluno.Remove(alunoDelete);
+                _context.Aluno.Remove(aluno);
                 _context.SaveChanges();
                 return Ok("Aluno excluído com sucesso");
             }

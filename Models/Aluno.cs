@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using EscolaAPI.Context;
 
 namespace EscolaAPI.Models
 {
@@ -15,5 +16,5 @@ namespace EscolaAPI.Models
         [Required]
         public string Email { get; set; }
         public virtual ICollection<Turma> Turmas { get; set; }
-    }
+   }
 }

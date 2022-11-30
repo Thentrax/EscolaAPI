@@ -16,7 +16,7 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(int alunoId, int turmaId)
+        public IActionResult PostMatricula(int alunoId, int turmaId)
         {
             Aluno aluno = new Aluno { Id = alunoId };
             if (aluno == null)
@@ -26,6 +26,12 @@ namespace EscolaAPI.Controllers
             _context.Aluno.Add(aluno);
             _context.Aluno.Attach(aluno);
 
+            var turmaBanco = _context.Turma.Include(t => t.Alunos).FirstOrDefault(t => t.Id == turmaId);
+            if (turmaBanco.Alunos.Count >= 5)
+            {
+                return BadRequest("Turma lotada");
+            }
+            
             Turma turma = new Turma { Id = turmaId };
             if (turma == null)
             {
@@ -41,7 +47,7 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetMatricula()
         {
             var matriculas = (
                 from turma in _context.Turma
@@ -54,7 +60,7 @@ namespace EscolaAPI.Controllers
                     Turma = turma.Nome
                 }
             ).ToList();
-            if (matriculas == null)
+            if (matriculas.Count == 0)
             {
                 return NotFound("Nenhuma matrícula encontrada");
             }
@@ -64,7 +70,7 @@ namespace EscolaAPI.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int alunoId, int turmaId)
+        public IActionResult DeleteMatricula(int alunoId, int turmaId)
         {
             var aluno = _context.Aluno.FirstOrDefault(a => a.Id == alunoId);
             if (aluno == null)

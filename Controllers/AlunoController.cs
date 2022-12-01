@@ -30,24 +30,23 @@ namespace EscolaAPI.Controllers
         [HttpPost]
         public IActionResult PostAluno(Aluno aluno, int turmaId)
         {
+
             if (aluno == null)
             {
                 return BadRequest("Dados de aluno inválidos");
             }
-            // valida se CPF já foi cadastrado
             var alunoExistente = _context.Aluno.FirstOrDefault(a => a.CPF == aluno.CPF);
             if (alunoExistente != null)
             {
                 return BadRequest("CPF já cadastrado");
             }
-            var turma = _context.Turma.FirstOrDefault(t => t.Id == turmaId);
-            if (turma == null)
-            {
-                return BadRequest("Turma não encontrada");
-            }
             else{
                 _context.Aluno.Add(aluno);
                 _context.SaveChanges();
+
+                MatriculaController matriculaController = new MatriculaController(_context);
+                matriculaController.PostMatricula(aluno.Id, turmaId);
+
                 return Ok("Aluno cadastrado com sucesso");
             }
         }

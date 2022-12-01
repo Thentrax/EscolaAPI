@@ -18,27 +18,21 @@ namespace EscolaAPI.Controllers
         [HttpPost]
         public IActionResult PostMatricula(int alunoId, int turmaId)
         {
-            Aluno aluno = new Aluno { Id = alunoId };
+            var aluno = _context.Aluno.FirstOrDefault(a => a.Id == alunoId);
             if (aluno == null)
             {
                 return NotFound("Aluno não encontrado");
             }
-            _context.Aluno.Add(aluno);
-            _context.Aluno.Attach(aluno);
-
-            var turmaBanco = _context.Turma.Include(t => t.Alunos).FirstOrDefault(t => t.Id == turmaId);
-            if (turmaBanco.Alunos.Count >= 5)
+            
+            var turma = _context.Turma.Include(t => t.Alunos).FirstOrDefault(t => t.Id == turmaId);
+            if (turma.Alunos.Contains(aluno))
+            {
+                return BadRequest("Aluno já matriculado");
+            }
+            if (turma.Alunos.Count >= 5)
             {
                 return BadRequest("Turma lotada");
             }
-            
-            Turma turma = new Turma { Id = turmaId };
-            if (turma == null)
-            {
-                return NotFound("Turma não encontrada");
-            }
-            _context.Turma.Add(turma);
-            _context.Turma.Attach(turma);
 
             turma.Alunos.Add(aluno);
             _context.SaveChanges();
